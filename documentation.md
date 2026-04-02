@@ -1,55 +1,45 @@
-# 📘 Currency Converter API – Detailed Documentation
+# Currency Converter API – Documentation
 
-This document provides **technical documentation** for developers using the Currency Converter API.
+This document provides detailed usage instructions for the Currency Converter API built with **Flask** and powered by the [Frankfurter API](https://www.frankfurter.app/).
 
 ---
 
 ## 🔹 Base URL
 
-```id="gk3m8r"
+When running locally:
 http://127.0.0.1:5000
-```
 
 ---
 
 ## 🔹 Endpoint: `/convert`
 
-Convert an amount from one currency to another using real-time exchange rates.
+Convert an amount from one currency to another.
+
+### Request
+**Method:** `GET`  
+**URL:**  
+/convert?amount=<value>&from=<source_currency>&to=<target_currency>
 
 ---
 
-### 📌 Request
 
-**Method:** `GET`
-**Endpoint:**
-
-```id="g0t9kb"
-/convert
-```
-
----
-
-### 📌 Query Parameters
-
-| Parameter | Type   | Required | Default | Description                     |
-| --------- | ------ | -------- | ------- | ------------------------------- |
-| `amount`  | float  | No       | `1`     | Amount to convert               |
-| `from`    | string | No       | `USD`   | Source currency (ISO 4217 code) |
-| `to`      | string | No       | `EUR`   | Target currency (ISO 4217 code) |
+### Query Parameters
+| Parameter  | Type   | Required | Default | Description |
+|------------|--------|----------|---------|-------------|
+| `amount`   | float  | No       | `1`     | The amount of money to convert |
+| `from`     | string | No       | `USD`   | The source currency (ISO 4217 code, e.g., `USD`, `EUR`, `INR`) |
+| `to`       | string | No       | `EUR`   | The target currency (ISO 4217 code) |
 
 ---
 
-### 📌 Example Request
-
-```http id="bq2w1n"
+### Example Request
+```http
 GET /convert?amount=100&from=USD&to=INR
 ```
 
 ---
 
-### 📌 Example Response
-
-```json id="j1cz1f"
+### Example Response
 {
   "from": "USD",
   "to": "INR",
@@ -57,144 +47,7 @@ GET /convert?amount=100&from=USD&to=INR
   "rate": 83.25,
   "converted": 8325.0
 }
-```
 
----
-
-## 🔹 Response Fields
-
-| Field       | Type   | Description           |
-| ----------- | ------ | --------------------- |
-| `from`      | string | Source currency       |
-| `to`        | string | Target currency       |
-| `amount`    | float  | Input amount          |
-| `rate`      | float  | Exchange rate         |
-| `converted` | float  | Final converted value |
-
----
-
-## ⚠️ Error Handling
-
-### 🔸 400 – Bad Request
-
-Returned when:
-
-* Invalid `amount` (non-numeric)
-* Invalid currency code
-
-**Example:**
-
-```json id="b3p3rf"
-{
-  "error": "Invalid currency code"
-}
-```
-
----
-
-### 🔸 500 – Internal Server Error
-
-Returned when:
-
-* External API fails
-* Unexpected server issues occur
-
-**Example:**
-
-```json id="r9t2v8"
-{
-  "error": "Something went wrong"
-}
-```
-
----
-
-## 🔄 Internal Workflow
-
-```id="7yk8w9"
-Client Request
-     ↓
-Flask Route (/convert)
-     ↓
-Service Layer (conversion logic)
-     ↓
-External API Call (Frankfurter)
-     ↓
-Response Returned (JSON)
-```
-
----
-
-## 🌐 External API Integration
-
-This project uses the **Frankfurter API** to fetch exchange rates.
-
-### Endpoint Used:
-
-```id="a8n0zz"
-https://api.frankfurter.app/latest
-```
-
-### Parameters:
-
-* `base`: Source currency
-* `symbols`: Target currency
-
----
-
-## 🧪 Testing the API
-
-You can test the API using:
-
-### 🔹 Browser
-
-```id="xxe8g0"
-http://127.0.0.1:5000/convert?amount=100&from=USD&to=INR
-```
-
-### 🔹 Postman / Curl
-
-```bash id="cg87i3"
-curl "http://127.0.0.1:5000/convert?amount=100&from=USD&to=INR"
-```
-
----
-
-## 📌 Supported Currencies
-
-All currencies supported by the Frankfurter API are valid.
-
-Examples:
-
-* USD (US Dollar)
-* EUR (Euro)
-* INR (Indian Rupee)
-* GBP (British Pound)
-* JPY (Japanese Yen)
-
----
-
-## 🚧 Limitations
-
-* No caching (every request hits external API)
-* Single currency conversion per request
-* Depends on third-party API availability
-
----
-
-## 🔮 Future Enhancements
-
-* `/currencies` endpoint to list supported currencies
-* Batch conversion (multiple currencies at once)
-* Caching layer (Redis / in-memory)
-* Authentication & rate limiting
-* Deployment (Docker / cloud hosting)
-
----
-
-## 📎 Notes
-
-* Currency codes must follow **ISO 4217 standard**
-* Default conversion: `USD → EUR` with amount `1` if parameters are omitted
-
----
+### Supported Currencies
+The API supports all currencies provided by the Frankfurter API.
+Examples include: USD, EUR, GBP, INR, JPY, AUD, etc.
