@@ -16,7 +16,7 @@ A clean, modular **Flask-based Currency Converter API** that fetches real-time e
 
 ## 📸 Demo / Preview
 
-![API Demo](assets/demo.png)
+![API Demo](assets/Demo.png)
 
 ---
 
