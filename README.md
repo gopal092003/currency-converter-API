@@ -62,7 +62,6 @@ venv\Scripts\activate      # Windows
 ```bash
 pip install -r requirements.txt
 ```
-
 ---
 
 ## ▶️ Run the Application
@@ -102,29 +101,10 @@ GET /convert
   "from": "USD",
   "to": "INR",
   "amount": 100,
-  "rate": 83.25,
-  "converted": 8325.0
+  "rate": 93.43,
+  "converted": 9343
 }
 ```
-
----
-
-## 📊 API Workflow
-
-![Workflow Diagram](assets/architecture.png)
-
-> 📌 **Add this image:**
-> Create a simple diagram showing:
->
-> ```
-> Client → Flask Route → Service Layer → External API → Response
-> ```
->
-> You can make this using:
->
-> * draw.io (recommended)
-> * PowerPoint
-> * Excalidraw
 
 ---
 
@@ -187,3 +167,12 @@ If you like this project:
 * 🧠 Use it in your own projects
 
 ---
+=======
+## References
+-[Frankfurter Exchange Rates API](https://frankfurter.dev/)
+
+## Future
+- Add `/currencies` endpoint to list supported currencies.
+- Support batch conversion (one-to-many).
+- Add caching for faster repeated requests.
+- Dockerize the application for easy deployment.
