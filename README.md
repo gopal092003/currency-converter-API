@@ -1,76 +1,94 @@
-# 💱 Currency Converter API
+# Currency Converter API
 
-A clean, modular **Flask-based Currency Converter API** that fetches real-time exchange rates using the **Frankfurter API**.
-
----
-
-## 🚀 Features
-
-* Convert between any two currencies
-* Real-time exchange rates
-* Clean and scalable project structure
-* Error handling for invalid inputs
-* Lightweight and easy to extend
+A REST API built with Flask for converting currencies using real-time exchange rates from the Frankfurter Exchange Rates API. The project follows a modular architecture with separate layers for routing, business logic, configuration, and external API integration, making it easy to maintain and extend.
 
 ---
 
-## 📸 Demo / Preview
+## Features
 
-![API Demo](assets/Demo.png)
+- Convert between supported currencies using live exchange rates
+- Real-time data powered by the Frankfurter API
+- Modular and maintainable project structure
+- Input validation and error handling
+- Lightweight and easy to extend
 
 ---
 
-## 🏗️ Project Structure
+## Tech Stack
 
-```
+- Flask
+- Requests
+- Frankfurter Exchange Rates API
+
+---
+
+## Project Structure
+
+```text
 currency-converter-api/
 │
 ├── app/
-│   ├── routes/        # API endpoints
-│   ├── services/      # Business logic
-│   ├── utils/         # External API calls
-│   └── config/        # Configuration
+│   ├── config/         # Application configuration
+│   ├── routes/         # API endpoints
+│   ├── services/       # Business logic
+│   └── utils/          # External API integration
 │
-├── tests/             # Unit tests
-├── run.py             # Entry point
+├── tests/              # Unit tests
+├── documentation.md
 ├── requirements.txt
-├── README.md
-└── documentation.md
+├── run.py
+└── README.md
 ```
 
 ---
 
-## ⚙️ Installation
+## Getting Started
 
-### 1. Clone the repository
+### Clone the Repository
 
 ```bash
 git clone https://github.com/gopal092003/currency-converter-API.git
+
 cd currency-converter-API
 ```
 
-### 2. Create virtual environment (recommended)
+### Create a Virtual Environment
 
 ```bash
 python -m venv venv
-source venv/bin/activate   # Linux/Mac
-venv\Scripts\activate      # Windows
 ```
 
-### 3. Install dependencies
+Activate the environment:
+
+**Windows**
+
+```bash
+venv\Scripts\activate
+```
+
+**Linux / macOS**
+
+```bash
+source venv/bin/activate
+```
+
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
+
 ---
 
-## ▶️ Run the Application
+## Running the Application
+
+Start the development server:
 
 ```bash
 python run.py
 ```
 
-Server will start at:
+The API will be available at:
 
 ```
 http://127.0.0.1:5000
@@ -78,23 +96,21 @@ http://127.0.0.1:5000
 
 ---
 
-## 🔌 API Usage
+## API Usage
 
-### ➤ Convert Currency
+### Convert Currency
 
-**Endpoint:**
-
-```
+```http
 GET /convert
 ```
 
-**Example Request:**
+Example request:
 
-```
-/convert?amount=100&from=USD&to=INR
+```http
+GET /convert?amount=100&from=USD&to=INR
 ```
 
-**Example Response:**
+### Example Response
 
 ```json
 {
@@ -108,16 +124,25 @@ GET /convert
 
 ---
 
-## ⚠️ Error Handling
+## How It Works
 
-| Status Code | Description                     |
-| ----------- | ------------------------------- |
-| 400         | Invalid input (amount/currency) |
-| 500         | Internal server error           |
+1. The client sends a currency conversion request with the amount, source currency, and target currency.
+2. The application fetches the latest exchange rate from the Frankfurter API.
+3. The converted amount is calculated and returned in a structured JSON response.
 
 ---
 
-## 🧪 Running Tests
+## Error Handling
+
+| Status Code | Description |
+|-------------|-------------|
+| 200 | Request completed successfully |
+| 400 | Invalid amount or unsupported currency |
+| 500 | Internal server error |
+
+---
+
+## Running Tests
 
 ```bash
 python -m unittest discover tests
@@ -125,54 +150,31 @@ python -m unittest discover tests
 
 ---
 
-## 📦 Dependencies
+## API Reference
 
-* Flask
-* Requests
-
----
-
-## 🔮 Future Improvements
-
-* Add `/currencies` endpoint
-* Add caching (Redis / in-memory)
-* Batch currency conversion
-* Docker support
-* Deploy to cloud (Render / AWS)
+This project uses the **Frankfurter Exchange Rates API** to retrieve live currency exchange rates.
 
 ---
 
-## 🌐 API Reference
+## Future Improvements
 
-Powered by:
-
-* Frankfurter Exchange Rate API
+- Add an endpoint to list supported currencies
+- Support batch currency conversion
+- Add caching for frequently requested exchange rates
+- Dockerize the application
+- Deploy to a cloud platform
+- Add request rate limiting
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Gopal Gupta**
 
-* GitHub: https://github.com/gopal092003
+GitHub: https://github.com/gopal092003
 
 ---
 
-## ⭐ Support
+## License
 
-If you like this project:
-
-* ⭐ Star the repo
-* 🍴 Fork it
-* 🧠 Use it in your own projects
-
----
-=======
-## References
--[Frankfurter Exchange Rates API](https://frankfurter.dev/)
-
-## Future
-- Add `/currencies` endpoint to list supported currencies.
-- Support batch conversion (one-to-many).
-- Add caching for faster repeated requests.
-- Dockerize the application for easy deployment.
+This project is licensed under the MIT License.
