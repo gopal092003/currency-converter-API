@@ -24,7 +24,7 @@ A REST API built with Flask for converting currencies using real-time exchange r
 
 ## Project Structure
 
-```text
+```
 currency-converter-api/
 │
 ├── app/
@@ -46,7 +46,7 @@ currency-converter-api/
 
 ### Clone the Repository
 
-```bash
+```
 git clone https://github.com/gopal092003/currency-converter-API.git
 
 cd currency-converter-API
@@ -54,7 +54,7 @@ cd currency-converter-API
 
 ### Create a Virtual Environment
 
-```bash
+```
 python -m venv venv
 ```
 
@@ -62,19 +62,19 @@ Activate the environment:
 
 **Windows**
 
-```bash
+```
 venv\Scripts\activate
 ```
 
 **Linux / macOS**
 
-```bash
+```
 source venv/bin/activate
 ```
 
 ### Install Dependencies
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
@@ -84,7 +84,7 @@ pip install -r requirements.txt
 
 Start the development server:
 
-```bash
+```
 python run.py
 ```
 
@@ -144,7 +144,7 @@ GET /convert?amount=100&from=USD&to=INR
 
 ## Running Tests
 
-```bash
+```
 python -m unittest discover tests
 ```
 
