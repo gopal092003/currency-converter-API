@@ -1,3 +1,92 @@
-__pycache__/
-*.pyc
+# Environment variables and secrets
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials/
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+.hypothesis/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Packaging and build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+pip-wheel-metadata/
+
+# Coverage and test reports
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+junit.xml
+test-results/
+reports/
+
+# Type-checker and linter outputs
+.mypy_cache/
+.dmypy.json
+.ruff_cache/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs and temporary files
+*.log
+api_integration.txt
+collect.txt
+logs/
+tmp/
+temp/
+
+# Local databases and data
+*.db
+*.sqlite
+*.sqlite3
+data/local/
+*.dump
+
+# Local infrastructure state
+.terraform/
+terraform.tfstate
+terraform.tfstate.*
+*.tfstate.backup
+
+# Docker overrides and local secrets
+compose.override.yaml
+docker-compose.override.yml
+
+# Profiling and performance artifacts
+.prof
+.profraw
+*.pyprof
+
+# Generated documentation
+site/

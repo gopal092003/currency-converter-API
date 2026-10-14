@@ -1,1 +1,1 @@
-# empty file (marks app as a package)
+"""Currency Converter API package."""

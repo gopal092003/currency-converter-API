@@ -1,0 +1,23 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: currency-converter-config
+  namespace: currency-converter
+data:
+  APP_ENV: production
+  DEBUG: "false"
+  LOG_LEVEL: INFO
+
+  EXCHANGE_PROVIDER: frankfurter
+  EXCHANGE_API: https://api.frankfurter.app/latest
+  EXCHANGE_TIMEOUT_SECONDS: "5"
+  EXCHANGE_MAX_RETRIES: "2"
+
+  API_KEY_AUTH_ENABLED: "true"
+
+  METRICS_ENABLED: "true"
+  METRICS_PATH: /metrics
+
+  RATE_CACHE_TTL_SECONDS: "3600"
+  MAX_STALE_RATE_AGE_SECONDS: "86400"

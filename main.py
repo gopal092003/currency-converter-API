@@ -1,39 +1,14 @@
-# converter.py
-from flask import Flask, request, jsonify
-import requests
+"""Application entry point for local development and dockerized runs."""
 
-app = Flask(__name__)
+import uvicorn
 
-EXCHANGE_API = "https://api.frankfurter.app/latest"
-
-@app.route("/convert", methods=["GET"])
-def convert_currency():
-    try:
-        # Get parameters from request
-        amount = float(request.args.get("amount", 1))
-        from_currency = request.args.get("from", "USD").upper()
-        to_currency = request.args.get("to", "EUR").upper()
-
-        # Fetch exchange rate
-        response = requests.get(EXCHANGE_API, params={"base": from_currency, "symbols": to_currency})
-        data = response.json()
-
-        if "rates" not in data or to_currency not in data["rates"]:
-            return jsonify({"error": "Invalid currency code"}), 400
-
-        rate = data["rates"][to_currency]
-        converted_amount = amount * rate
-
-        return jsonify({
-            "from": from_currency,
-            "to": to_currency,
-            "amount": amount,
-            "rate": rate,
-            "converted": round(converted_amount, 2)
-        })
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
+from app.core.config import settings
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    uvicorn.run(
+        "app.main:app",
+        host=settings.host,
+        port=settings.port,
+        reload=settings.app_env == "development",
+        log_level=settings.log_level.lower(),
+    )
