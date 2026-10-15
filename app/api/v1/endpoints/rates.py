@@ -1,16 +1,14 @@
-
 """V1 exchange-rate endpoints."""
 
 from datetime import date
 from typing import Annotated
-
-from fastapi import APIRouter, Query, status
 
 from app.api.dependencies import RatesServiceDependency
 from app.modules.rates.schemas import (
     RateResponse,
     TimeSeriesRateResponse,
 )
+from fastapi import APIRouter, Query, status
 
 router = APIRouter(tags=["V1 - Exchange Rates"])
 

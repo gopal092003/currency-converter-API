@@ -1,4 +1,3 @@
-
 """Business logic for retrieving and normalizing exchange rates."""
 
 from datetime import date
@@ -61,9 +60,7 @@ class RatesService:
         query = self._validate_query(base, symbols)
 
         if rate_date > date.today():
-            raise ValidationError(
-                "Historical rate date cannot be in the future."
-            )
+            raise ValidationError("Historical rate date cannot be in the future.")
 
         try:
             payload = await self._provider.get_historical_rates(
@@ -106,14 +103,10 @@ class RatesService:
         query = self._validate_query(base, symbols)
 
         if start_date > end_date:
-            raise ValidationError(
-                "start_date must be on or before end_date."
-            )
+            raise ValidationError("start_date must be on or before end_date.")
 
         if end_date > date.today():
-            raise ValidationError(
-                "The time-series end date cannot be in the future."
-            )
+            raise ValidationError("The time-series end date cannot be in the future.")
 
         try:
             payload = await self._provider.get_time_series(
@@ -194,9 +187,7 @@ class RatesService:
             ) from exc
 
         if query.symbols is not None and query.base in query.symbols:
-            raise ValidationError(
-                "The base currency must not be included in symbols."
-            )
+            raise ValidationError("The base currency must not be included in symbols.")
 
         return query
 

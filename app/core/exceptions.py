@@ -1,4 +1,4 @@
-﻿"""Application-specific exceptions.
+"""Application-specific exceptions.
 Services raise these exceptions without depending on HTTP response handling.
 The API layer is responsible for converting them into HTTP responses.
 """
@@ -8,9 +8,7 @@ from typing import Any
 from app.core.constants import (
     ERROR_AUTHENTICATION,
     ERROR_AUTHORIZATION,
-    ERROR_FORBIDDEN,
     ERROR_INTERNAL_ERROR,
-    ERROR_INTERNAL_SERVER,
     ERROR_INVALID_REQUEST,
     ERROR_PROVIDER_ERROR,
     ERROR_PROVIDER_INVALID_RESPONSE,
@@ -19,7 +17,6 @@ from app.core.constants import (
     ERROR_QUOTA_EXCEEDED,
     ERROR_RATE_LIMIT_EXCEEDED,
     ERROR_RATE_NOT_FOUND,
-    ERROR_UNAUTHORIZED,
     ERROR_UNSUPPORTED_CURRENCY,
     ERROR_VALIDATION,
 )
@@ -145,4 +142,3 @@ class QuotaExceededError(AppException):
     code = ERROR_QUOTA_EXCEEDED
     default_message = "The usage quota has been exceeded."
     retryable = False
-

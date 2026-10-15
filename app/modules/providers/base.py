@@ -2,7 +2,6 @@
 
 from abc import ABC, abstractmethod
 from datetime import date
-from decimal import Decimal
 from typing import Any
 
 

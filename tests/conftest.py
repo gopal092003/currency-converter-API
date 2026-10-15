@@ -1,4 +1,3 @@
-
 """Shared fixtures for the test suite."""
 
 import json
@@ -7,8 +6,6 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from fastapi.testclient import TestClient
-
 from app.api.dependencies import (
     get_currency_service,
     get_rates_service,
@@ -17,7 +14,7 @@ from app.main import create_app
 from app.modules.currency.service import CurrencyConversionService
 from app.modules.providers.base import ExchangeRateProvider
 from app.modules.rates.service import RatesService
-
+from fastapi.testclient import TestClient
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
@@ -175,12 +172,8 @@ def app(
     """Create an application with service dependencies overridden."""
     application = create_app()
 
-    application.dependency_overrides[get_currency_service] = (
-        lambda: currency_service
-    )
-    application.dependency_overrides[get_rates_service] = (
-        lambda: rates_service
-    )
+    application.dependency_overrides[get_currency_service] = lambda: currency_service
+    application.dependency_overrides[get_rates_service] = lambda: rates_service
 
     yield application
 

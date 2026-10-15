@@ -1,10 +1,8 @@
-
 from __future__ import annotations
 
 from app.modules.rate_limiting.policies import (
     RateLimitDecision,
     RateLimitPolicy,
-    RateLimitScope,
 )
 from app.modules.rate_limiting.storage import RateLimitStorage
 
@@ -22,10 +20,7 @@ class RateLimitService:
         if not identity:
             raise ValueError("Rate-limit identity cannot be empty")
 
-        counter_key = (
-            f"rate-limit:v1:{policy.scope.value}:"
-            f"{policy.name}:{identity}"
-        )
+        counter_key = f"rate-limit:v1:{policy.scope.value}:{policy.name}:{identity}"
 
         result = await self.storage.increment(
             counter_key,
@@ -34,9 +29,7 @@ class RateLimitService:
 
         allowed = result.count <= policy.limit
         remaining = max(0, policy.limit - result.count)
-        retry_after = (
-            result.reset_after_seconds if not allowed else 0
-        )
+        retry_after = result.reset_after_seconds if not allowed else 0
 
         return RateLimitDecision(
             allowed=allowed,

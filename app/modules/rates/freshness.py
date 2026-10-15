@@ -1,14 +1,13 @@
-
 """Exchange-rate freshness and stale-data policies."""
 
 from dataclasses import dataclass
-from datetime import date, datetime, time, timezone
-from enum import Enum
+from datetime import UTC, date, datetime, time
+from enum import StrEnum
 
 from app.core.config import settings
 
 
-class FreshnessStatus(str, Enum):
+class FreshnessStatus(StrEnum):
     FRESH = "fresh"
     STALE = "stale"
     EXPIRED = "expired"
@@ -47,9 +46,7 @@ class RateFreshnessPolicy:
             raise ValueError("Fresh TTL cannot be negative.")
 
         if self.max_stale_age_seconds < self.fresh_ttl_seconds:
-            raise ValueError(
-                "Maximum stale age must be at least the fresh TTL."
-            )
+            raise ValueError("Maximum stale age must be at least the fresh TTL.")
 
     @staticmethod
     def _as_utc_datetime(
@@ -57,14 +54,14 @@ class RateFreshnessPolicy:
     ) -> datetime:
         if isinstance(value, datetime):
             if value.tzinfo is None:
-                return value.replace(tzinfo=timezone.utc)
-            return value.astimezone(timezone.utc)
+                return value.replace(tzinfo=UTC)
+            return value.astimezone(UTC)
 
         if isinstance(value, date):
             return datetime.combine(
                 value,
                 time.min,
-                tzinfo=timezone.utc,
+                tzinfo=UTC,
             )
 
         raise TypeError("Rate timestamp must be a date or datetime.")
@@ -76,9 +73,7 @@ class RateFreshnessPolicy:
     ) -> FreshnessResult:
         """Evaluate freshness at the specified time or current UTC time."""
         observed_at = self._as_utc_datetime(rate_timestamp)
-        current_time = self._as_utc_datetime(
-            now or datetime.now(timezone.utc)
-        )
+        current_time = self._as_utc_datetime(now or datetime.now(UTC))
 
         age_seconds = max(
             0.0,

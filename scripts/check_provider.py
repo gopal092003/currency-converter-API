@@ -1,4 +1,3 @@
-
 """Manually verify exchange-rate provider connectivity and response format."""
 
 import argparse
@@ -9,7 +8,6 @@ from datetime import date
 from decimal import Decimal
 
 import httpx
-
 from app.core.config import settings
 from app.modules.providers.exceptions import ProviderError
 from app.modules.providers.factory import create_provider
@@ -60,9 +58,7 @@ async def check_provider(base: str, symbols: list[str]) -> bool:
         rates = payload.get("rates")
 
         if returned_base != base:
-            raise ValueError(
-                f"Expected base {base}, received {returned_base!r}."
-            )
+            raise ValueError(f"Expected base {base}, received {returned_base!r}.")
 
         if not isinstance(returned_date, str):
             raise ValueError("Missing or invalid response date.")
@@ -76,9 +72,7 @@ async def check_provider(base: str, symbols: list[str]) -> bool:
 
         missing = set(symbols) - set(rates)
         if missing:
-            raise ValueError(
-                f"Missing requested rates: {', '.join(sorted(missing))}"
-            )
+            raise ValueError(f"Missing requested rates: {', '.join(sorted(missing))}")
 
         for code in symbols:
             rate = Decimal(str(rates[code]))
@@ -108,9 +102,7 @@ def main() -> int:
     args = parse_args()
 
     try:
-        success = asyncio.run(
-            check_provider(args.base, args.symbols)
-        )
+        success = asyncio.run(check_provider(args.base, args.symbols))
     except KeyboardInterrupt:
         print("\nInterrupted.")
         return 130

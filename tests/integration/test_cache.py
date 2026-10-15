@@ -1,10 +1,8 @@
-
 """Integration tests for the rate cache."""
 
 import asyncio
 
 import pytest
-
 from app.modules.rates.cache import (
     InMemoryRateCache,
     make_rate_cache_key,

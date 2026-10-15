@@ -1,16 +1,14 @@
-
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
-from sqlalchemy.pool import StaticPool
-
 from app.core.exceptions import AuthenticationError, InvalidRequestError
 from app.db.models import APIKey, Base
 from app.modules.auth.service import APIKeyService
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
 
 
 @pytest.fixture
@@ -97,7 +95,7 @@ def test_revoked_key_is_rejected(service):
 
 
 def test_expired_key_is_rejected(service):
-    expired_at = datetime.now(timezone.utc) - timedelta(minutes=5)
+    expired_at = datetime.now(UTC) - timedelta(minutes=5)
 
     record, raw_key = service.create_key(
         owner_id="account-1",
@@ -193,7 +191,7 @@ def test_list_keys_returns_only_requested_owner(service):
 
 
 def test_rotation_preserves_expiry_and_quota(service):
-    expiry = datetime.now(timezone.utc) + timedelta(days=7)
+    expiry = datetime.now(UTC) + timedelta(days=7)
     old_record, _ = service.create_key(
         owner_id="account-1",
         name="Limited key",

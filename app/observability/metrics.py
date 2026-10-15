@@ -1,4 +1,3 @@
-
 """Prometheus metrics and HTTP request instrumentation."""
 
 import logging
@@ -118,10 +117,15 @@ class MetricsMiddleware:
         # Avoid raw paths containing IDs or user-controlled values.
         # Use the route template where available in a later metrics hook.
         path = scope.get("path", "/")
-        route_label = path if path in {
-            "/health/live",
-            settings.metrics_path,
-        } else "unmatched_or_unresolved"
+        route_label = (
+            path
+            if path
+            in {
+                "/health/live",
+                settings.metrics_path,
+            }
+            else "unmatched_or_unresolved"
+        )
 
         async def capture_status(message) -> None:
             nonlocal status_code

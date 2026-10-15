@@ -1,14 +1,8 @@
-
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import pytest
-from pydantic import ValidationError
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
-from sqlalchemy.pool import StaticPool
-
 from app.core.exceptions import AuthenticationError, InvalidRequestError
 from app.core.security import (
     generate_api_key,
@@ -20,7 +14,10 @@ from app.core.security import (
 from app.db.models import APIKey, Base
 from app.modules.auth.schemas import APIKeyPublic
 from app.modules.auth.service import APIKeyService
-
+from pydantic import ValidationError
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
 
 TEST_PEPPER = b"test-only-secret-pepper"
 
@@ -168,7 +165,7 @@ def test_expired_key_cannot_authenticate(service):
     record, key = service.create_key(
         owner_id="security-test-owner",
         name="Expiry test",
-        expires_at=datetime.now(timezone.utc) - timedelta(minutes=1),
+        expires_at=datetime.now(UTC) - timedelta(minutes=1),
     )
 
     assert record.id is not None
@@ -264,7 +261,7 @@ def test_public_schema_rejects_unexpected_fields():
                 "owner_id": "owner-a",
                 "is_active": True,
                 "key_hash": "sensitive-value",
-                "created_at": datetime.now(timezone.utc),
-                "updated_at": datetime.now(timezone.utc),
+                "created_at": datetime.now(UTC),
+                "updated_at": datetime.now(UTC),
             }
         )

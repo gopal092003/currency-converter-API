@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import argparse
@@ -108,13 +107,9 @@ async def run_load_test(
     elapsed_seconds = time.perf_counter() - started
     latencies = [result.latency_ms for result in results]
     status_counts = Counter(str(result.status_code) for result in results)
-    errors = Counter(
-        result.error for result in results if result.error is not None
-    )
+    errors = Counter(result.error for result in results if result.error is not None)
 
-    successful = sum(
-        200 <= result.status_code < 300 for result in results
-    )
+    successful = sum(200 <= result.status_code < 300 for result in results)
     rate_limited = sum(result.status_code == 429 for result in results)
     server_errors = sum(result.status_code >= 500 for result in results)
 
@@ -158,7 +153,7 @@ def main() -> None:
     parser.add_argument(
         "--api-key",
         default=None,
-        help="Optional test API key. Avoid putting production secrets in shell history.",
+        help="Optional test key; avoid production secrets in shell history.",
     )
     args = parser.parse_args()
 

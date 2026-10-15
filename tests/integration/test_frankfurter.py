@@ -1,4 +1,3 @@
-
 """Integration tests for the Frankfurter provider."""
 
 import os
@@ -8,13 +7,11 @@ from decimal import Decimal
 import httpx
 import pytest
 import respx
-
 from app.modules.providers.exceptions import (
     ProviderRequestTimeoutError,
     ProviderResponseError,
 )
 from app.modules.providers.frankfurter import FrankfurterProvider
-
 
 BASE_URL = "https://api.frankfurter.app"
 
@@ -134,9 +131,7 @@ async def test_invalid_provider_json_is_rejected():
 @pytest.mark.asyncio
 async def test_provider_timeout_is_mapped():
     with respx.mock(base_url=BASE_URL) as mock:
-        mock.get("/latest").mock(
-            side_effect=httpx.ReadTimeout("simulated timeout")
-        )
+        mock.get("/latest").mock(side_effect=httpx.ReadTimeout("simulated timeout"))
 
         async with httpx.AsyncClient(base_url=BASE_URL) as client:
             provider = FrankfurterProvider(client=client)

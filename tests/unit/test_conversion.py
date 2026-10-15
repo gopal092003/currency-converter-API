@@ -1,11 +1,9 @@
-
 """Unit tests for the currency conversion service."""
 
 from datetime import date
 from decimal import Decimal
 
 import pytest
-
 from app.core.exceptions import ProviderError, UnsupportedCurrencyError
 from app.modules.currency.schemas import ConversionRequest
 from app.modules.currency.service import CurrencyConversionService
@@ -45,9 +43,7 @@ async def test_convert_usd_to_inr(fake_provider):
 
     result = await service.convert(request)
 
-    assert result.exchange_rate == Decimal(
-        "88.46153846153846"
-    )
+    assert result.exchange_rate == Decimal("88.46153846153846")
     assert result.converted_amount == Decimal("8846.15")
 
 
@@ -98,9 +94,7 @@ async def test_convert_unsupported_target_currency(fake_provider):
         to_currency="ZZZ",
     )
 
-    with pytest.raises(
-        (UnsupportedCurrencyError, ProviderError)
-    ):
+    with pytest.raises((UnsupportedCurrencyError, ProviderError)):
         await service.convert(request)
 
 

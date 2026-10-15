@@ -3,7 +3,6 @@
 from typing import TYPE_CHECKING
 
 import httpx
-
 from app.core.config import settings
 from app.modules.providers.exceptions import ProviderConfigurationError
 from app.modules.providers.frankfurter import FrankfurterProvider

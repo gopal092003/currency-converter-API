@@ -1,4 +1,3 @@
-
 """API tests for exchange-rate endpoints."""
 
 import pytest

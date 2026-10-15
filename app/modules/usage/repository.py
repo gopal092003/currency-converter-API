@@ -1,12 +1,10 @@
-
 from __future__ import annotations
 
-from datetime import datetime, timezone
-
-from sqlalchemy import case, func, select
-from sqlalchemy.orm import Session
+from datetime import UTC, datetime
 
 from app.db.models.usage import UsageRecord
+from sqlalchemy import case, func, select
+from sqlalchemy.orm import Session
 
 
 class UsageRepository:
@@ -31,7 +29,7 @@ class UsageRepository:
             http_method=http_method.upper(),
             status_code=status_code,
             duration_ms=duration_ms,
-            occurred_at=occurred_at or datetime.now(timezone.utc),
+            occurred_at=occurred_at or datetime.now(UTC),
         )
         self.db.add(record)
         self.db.flush()
@@ -49,9 +47,7 @@ class UsageRepository:
         start: datetime | None = None,
         end: datetime | None = None,
     ) -> list[UsageRecord]:
-        statement = select(UsageRecord).where(
-            UsageRecord.api_key_id == api_key_id
-        )
+        statement = select(UsageRecord).where(UsageRecord.api_key_id == api_key_id)
 
         if start is not None:
             statement = statement.where(UsageRecord.occurred_at >= start)
@@ -59,8 +55,7 @@ class UsageRepository:
             statement = statement.where(UsageRecord.occurred_at < end)
 
         statement = (
-            statement
-            .order_by(
+            statement.order_by(
                 UsageRecord.occurred_at.desc(),
                 UsageRecord.id.desc(),
             )
@@ -76,10 +71,14 @@ class UsageRepository:
         start: datetime,
         end: datetime,
     ) -> int:
-        statement = select(func.count()).select_from(UsageRecord).where(
-            UsageRecord.api_key_id == api_key_id,
-            UsageRecord.occurred_at >= start,
-            UsageRecord.occurred_at < end,
+        statement = (
+            select(func.count())
+            .select_from(UsageRecord)
+            .where(
+                UsageRecord.api_key_id == api_key_id,
+                UsageRecord.occurred_at >= start,
+                UsageRecord.occurred_at < end,
+            )
         )
         return int(self.db.scalar(statement) or 0)
 
@@ -134,9 +133,7 @@ class UsageRepository:
         from sqlalchemy import delete
 
         result = self.db.execute(
-            delete(UsageRecord).where(
-                UsageRecord.occurred_at < cutoff
-            )
+            delete(UsageRecord).where(UsageRecord.occurred_at < cutoff)
         )
         self.db.flush()
         return int(result.rowcount or 0)

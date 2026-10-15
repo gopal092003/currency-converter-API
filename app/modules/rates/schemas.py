@@ -1,4 +1,3 @@
-
 """Schemas for exchange-rate data and API responses."""
 
 from datetime import date
@@ -12,7 +11,6 @@ from pydantic import (
     field_validator,
     model_validator,
 )
-
 
 CurrencyCode = Annotated[
     str,
@@ -66,8 +64,7 @@ class RateData(BaseModel):
             normalized_code = code.strip().upper()
             if normalized_code in normalized:
                 raise ValueError(
-                    f"Duplicate currency code after normalization: "
-                    f"{normalized_code}"
+                    f"Duplicate currency code after normalization: {normalized_code}"
                 )
             normalized[normalized_code] = rate
 
@@ -76,9 +73,7 @@ class RateData(BaseModel):
     @model_validator(mode="after")
     def validate_base_not_in_rates(self) -> "RateData":
         if self.base in self.rates:
-            raise ValueError(
-                "The base currency must not appear in the rates mapping."
-            )
+            raise ValueError("The base currency must not appear in the rates mapping.")
         return self
 
 

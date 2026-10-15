@@ -7,7 +7,6 @@ from typing import Any
 from urllib.parse import urlsplit, urlunsplit
 
 import httpx
-
 from app.core.config import settings
 from app.modules.providers.base import ExchangeRateProvider
 from app.modules.providers.exceptions import (
@@ -41,11 +40,9 @@ class FrankfurterProvider(ExchangeRateProvider):
         path = parsed.path.rstrip("/")
 
         if path.endswith("/latest"):
-            path = path[:-len("/latest")]
+            path = path[: -len("/latest")]
 
-        return urlunsplit(
-            (parsed.scheme, parsed.netloc, path.rstrip("/"), "", "")
-        )
+        return urlunsplit((parsed.scheme, parsed.netloc, path.rstrip("/"), "", ""))
 
     async def _request_json(
         self,
@@ -59,9 +56,7 @@ class FrankfurterProvider(ExchangeRateProvider):
         for attempt in range(self._max_retries + 1):
             try:
                 if self._client is None:
-                    async with httpx.AsyncClient(
-                        timeout=self._timeout
-                    ) as client:
+                    async with httpx.AsyncClient(timeout=self._timeout) as client:
                         response = await client.get(url, params=params)
                 else:
                     response = await self._client.get(url, params=params)
@@ -179,9 +174,7 @@ class FrankfurterProvider(ExchangeRateProvider):
             try:
                 code = cls._validate_currency_code(currency)
 
-                if isinstance(value, bool) or not isinstance(
-                    value, (int, float)
-                ):
+                if isinstance(value, bool) or not isinstance(value, (int, float)):
                     raise ValueError("Rate must be numeric.")
 
                 rate = float(value)
@@ -276,9 +269,7 @@ class FrankfurterProvider(ExchangeRateProvider):
             for currency, value in day_payload.items():
                 try:
                     code = self._validate_currency_code(currency)
-                    if isinstance(value, bool) or not isinstance(
-                        value, (int, float)
-                    ):
+                    if isinstance(value, bool) or not isinstance(value, (int, float)):
                         raise ValueError("Rate must be numeric.")
                     rate = float(value)
                     if not math.isfinite(rate) or rate <= 0:

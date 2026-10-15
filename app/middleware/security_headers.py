@@ -1,4 +1,3 @@
-
 """Security headers middleware."""
 
 from app.core.config import settings
@@ -20,7 +19,8 @@ class SecurityHeadersMiddleware:
                 headers = [
                     (name, value)
                     for name, value in message.get("headers", [])
-                    if name.lower() not in {
+                    if name.lower()
+                    not in {
                         b"x-content-type-options",
                         b"x-frame-options",
                         b"referrer-policy",

@@ -1,14 +1,12 @@
-
 from __future__ import annotations
 
 import pytest
-from sqlalchemy import create_engine, select
-from sqlalchemy.orm import Session
-from sqlalchemy.pool import StaticPool
-
 from app.core.security import hash_api_key
 from app.db.models import APIKey, Base
 from app.modules.auth.service import APIKeyService
+from sqlalchemy import create_engine, select
+from sqlalchemy.orm import Session
+from sqlalchemy.pool import StaticPool
 
 
 @pytest.fixture

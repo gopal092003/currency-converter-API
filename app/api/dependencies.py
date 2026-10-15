@@ -1,13 +1,11 @@
-
 """Shared FastAPI dependencies."""
 
 from typing import Annotated
 
-from fastapi import Depends, Request
-
 from app.modules.currency.service import CurrencyConversionService
 from app.modules.providers.base import ExchangeRateProvider
 from app.modules.rates.service import RatesService
+from fastapi import Depends, Request
 
 
 def get_provider(request: Request) -> ExchangeRateProvider:

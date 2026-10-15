@@ -1,13 +1,9 @@
-
 from __future__ import annotations
 
-from datetime import datetime, timezone
-
-from sqlalchemy.orm import Session
+from datetime import UTC, datetime
 
 from app.core.exceptions import (
     AuthenticationError,
-    AuthorizationError,
     InvalidRequestError,
 )
 from app.core.security import (
@@ -19,6 +15,7 @@ from app.core.security import (
 )
 from app.db.models.api_key import APIKey
 from app.modules.auth.repository import APIKeyRepository
+from sqlalchemy.orm import Session
 
 
 class APIKeyService:
@@ -32,11 +29,11 @@ class APIKeyService:
             return False
 
         expires_at = record.expires_at
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
 
         # SQLite may return naive datetimes even for timezone-aware columns.
         if expires_at.tzinfo is None:
-            expires_at = expires_at.replace(tzinfo=timezone.utc)
+            expires_at = expires_at.replace(tzinfo=UTC)
 
         return expires_at <= now
 

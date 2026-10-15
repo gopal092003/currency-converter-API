@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import asyncio
@@ -18,11 +17,9 @@ class RateLimitStorage(Protocol):
         self,
         key: str,
         window_seconds: int,
-    ) -> CounterResult:
-        ...
+    ) -> CounterResult: ...
 
-    async def close(self) -> None:
-        ...
+    async def close(self) -> None: ...
 
 
 class InMemoryRateLimitStorage:

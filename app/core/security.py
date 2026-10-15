@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import hashlib
@@ -80,6 +79,4 @@ def verify_api_key(raw_key: str, stored_hash: str) -> bool:
 
 def is_valid_api_key_format(raw_key: str) -> bool:
     """Check key syntax without checking whether the key exists."""
-    return isinstance(raw_key, str) and bool(
-        API_KEY_PATTERN.fullmatch(raw_key)
-    )
+    return isinstance(raw_key, str) and bool(API_KEY_PATTERN.fullmatch(raw_key))

@@ -1,4 +1,3 @@
-
 """Shared ORM model definitions."""
 
 from datetime import datetime

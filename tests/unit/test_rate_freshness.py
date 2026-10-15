@@ -1,10 +1,8 @@
-
 """Unit tests for rate freshness policies."""
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import pytest
-
 from app.modules.rates.freshness import (
     FreshnessStatus,
     RateFreshnessPolicy,
@@ -21,7 +19,7 @@ def policy():
 
 @pytest.fixture
 def now():
-    return datetime(2026, 10, 14, 12, 0, tzinfo=timezone.utc)
+    return datetime(2026, 10, 14, 12, 0, tzinfo=UTC)
 
 
 @pytest.mark.unit
@@ -92,8 +90,8 @@ def test_future_timestamp_has_zero_age(policy, now):
 @pytest.mark.unit
 def test_date_input_is_supported(policy):
     result = policy.evaluate(
-        datetime(2026, 10, 14, tzinfo=timezone.utc).date(),
-        now=datetime(2026, 10, 14, 12, 0, tzinfo=timezone.utc),
+        datetime(2026, 10, 14, tzinfo=UTC).date(),
+        now=datetime(2026, 10, 14, 12, 0, tzinfo=UTC),
     )
 
     assert result.age_seconds == 43200
@@ -104,7 +102,7 @@ def test_date_input_is_supported(policy):
 def test_naive_datetime_is_treated_as_utc(policy):
     result = policy.evaluate(
         datetime(2026, 10, 14, 11, 30),
-        now=datetime(2026, 10, 14, 12, 0, tzinfo=timezone.utc),
+        now=datetime(2026, 10, 14, 12, 0, tzinfo=UTC),
     )
 
     assert result.age_seconds == 1800

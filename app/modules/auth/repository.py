@@ -1,12 +1,10 @@
-
 from __future__ import annotations
 
-from datetime import datetime, timezone
-
-from sqlalchemy import select
-from sqlalchemy.orm import Session
+from datetime import UTC, datetime
 
 from app.db.models.api_key import APIKey
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 
 class APIKeyRepository:
@@ -68,18 +66,18 @@ class APIKeyRepository:
         return list(self.db.scalars(statement).all())
 
     def mark_used(self, record: APIKey) -> None:
-        record.last_used_at = datetime.now(timezone.utc)
+        record.last_used_at = datetime.now(UTC)
         self.db.flush()
 
     def revoke(self, record: APIKey) -> APIKey:
         record.is_active = False
-        record.revoked_at = datetime.now(timezone.utc)
+        record.revoked_at = datetime.now(UTC)
         self.db.flush()
         return record
 
     def revoke_all_for_owner(self, owner_id: str) -> int:
         records = self.list_for_owner(owner_id)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         count = 0
 
         for record in records:

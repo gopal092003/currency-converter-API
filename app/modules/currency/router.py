@@ -1,13 +1,11 @@
-
 """Currency conversion API routes."""
-
-from fastapi import APIRouter, status
 
 from app.api.dependencies import CurrencyServiceDependency
 from app.modules.currency.schemas import (
     ConversionRequest,
     ConversionResponse,
 )
+from fastapi import APIRouter, status
 
 router = APIRouter(
     prefix="/currency",

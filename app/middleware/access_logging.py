@@ -1,10 +1,7 @@
-
 """HTTP access logging middleware."""
 
 import logging
 import time
-
-from app.core.config import settings
 
 logger = logging.getLogger("app.access")
 
@@ -64,8 +61,10 @@ class AccessLoggingMiddleware:
             )
 
             log_method = (
-                logger.warning if status_code >= 500
-                else logger.info if status_code >= 400
+                logger.warning
+                if status_code >= 500
+                else logger.info
+                if status_code >= 400
                 else logger.info
             )
 

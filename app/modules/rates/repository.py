@@ -1,4 +1,3 @@
-
 """Persistence interface for exchange-rate datasets."""
 
 from abc import ABC, abstractmethod

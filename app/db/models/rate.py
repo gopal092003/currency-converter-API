@@ -1,4 +1,3 @@
-
 """ORM models for exchange-rate persistence."""
 
 from datetime import date, datetime

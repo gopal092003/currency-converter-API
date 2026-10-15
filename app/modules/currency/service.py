@@ -4,7 +4,6 @@ from decimal import Decimal, InvalidOperation
 from typing import Any
 
 from app.core.exceptions import (
-    RateNotFoundError,
     UnsupportedCurrencyError,
     ValidationError,
 )
@@ -33,9 +32,7 @@ class CurrencyConversionService:
         amount = request.amount
 
         if not amount.is_finite() or amount < 0:
-            raise ValidationError(
-                "Amount must be a finite, non-negative decimal."
-            )
+            raise ValidationError("Amount must be a finite, non-negative decimal.")
 
         if source == target:
             return ConversionResult(

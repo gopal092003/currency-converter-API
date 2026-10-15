@@ -1,4 +1,3 @@
-
 """Rate cache abstraction and in-memory implementation."""
 
 import asyncio

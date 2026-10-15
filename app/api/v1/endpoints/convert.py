@@ -1,13 +1,11 @@
-
 """V1 currency conversion endpoint."""
-
-from fastapi import APIRouter, status
 
 from app.api.dependencies import CurrencyServiceDependency
 from app.modules.currency.schemas import (
     ConversionRequest,
     ConversionResponse,
 )
+from fastapi import APIRouter, status
 
 router = APIRouter(
     tags=["V1 - Currency Conversion"],

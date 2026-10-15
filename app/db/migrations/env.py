@@ -1,8 +1,7 @@
-
 """Alembic migration environment."""
 
-from logging.config import fileConfig
 import os
+from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
@@ -30,10 +29,10 @@ def get_database_url() -> str:
     url = url.strip()
 
     if url.startswith("postgres://"):
-        return "postgresql+psycopg://" + url[len("postgres://"):]
+        return "postgresql+psycopg://" + url[len("postgres://") :]
 
     if url.startswith("postgresql://"):
-        return "postgresql+psycopg://" + url[len("postgresql://"):]
+        return "postgresql+psycopg://" + url[len("postgresql://") :]
 
     return url
 

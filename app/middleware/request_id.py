@@ -1,4 +1,3 @@
-
 """Request ID middleware."""
 
 import re
@@ -6,7 +5,6 @@ import uuid
 from collections.abc import Iterable
 
 from app.core.config import settings
-
 
 _REQUEST_ID_PATTERN = re.compile(r"^[A-Za-z0-9._-]{1,128}$")
 
@@ -20,9 +18,7 @@ class RequestIDMiddleware:
         header_name: str | None = None,
     ) -> None:
         self.app = app
-        self.header_name = (
-            header_name or settings.request_id_header
-        )
+        self.header_name = header_name or settings.request_id_header
         self.header_name_bytes = self.header_name.lower().encode("ascii")
 
     @staticmethod

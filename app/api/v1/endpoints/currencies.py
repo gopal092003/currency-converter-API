@@ -1,13 +1,11 @@
-
 """V1 supported-currency endpoint."""
-
-from fastapi import APIRouter, status
 
 from app.api.dependencies import RatesServiceDependency
 from app.modules.currency.schemas import (
     CurrencyMetadata,
     SupportedCurrenciesResponse,
 )
+from fastapi import APIRouter, status
 
 router = APIRouter(tags=["V1 - Currencies"])
 
@@ -32,10 +30,7 @@ async def get_supported_currencies(
     # from the returned rates mapping.
     codes = sorted({rate_data.base, *rate_data.rates.keys()})
 
-    currencies = [
-        CurrencyMetadata(code=code)
-        for code in codes
-    ]
+    currencies = [CurrencyMetadata(code=code) for code in codes]
 
     return SupportedCurrenciesResponse(
         success=True,

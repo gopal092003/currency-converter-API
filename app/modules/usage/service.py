@@ -1,9 +1,6 @@
-
 from __future__ import annotations
 
-from datetime import datetime, timezone
-
-from sqlalchemy.orm import Session
+from datetime import UTC, datetime
 
 from app.core.exceptions import QuotaExceededError
 from app.db.models.api_key import APIKey
@@ -14,17 +11,18 @@ from app.modules.usage.schemas import (
     UsageRecordResponse,
     UsageSummary,
 )
+from sqlalchemy.orm import Session
 
 
 def current_utc_month(
     now: datetime | None = None,
 ) -> tuple[datetime, datetime]:
-    current = now or datetime.now(timezone.utc)
+    current = now or datetime.now(UTC)
 
     if current.tzinfo is None:
-        current = current.replace(tzinfo=timezone.utc)
+        current = current.replace(tzinfo=UTC)
     else:
-        current = current.astimezone(timezone.utc)
+        current = current.astimezone(UTC)
 
     start = current.replace(
         day=1,
@@ -86,9 +84,7 @@ class UsageService:
             failed_requests=int(totals["failed_requests"]),
             total_duration_ms=float(totals["total_duration_ms"]),
             monthly_quota=quota,
-            remaining_quota=(
-                max(0, quota - used) if quota is not None else None
-            ),
+            remaining_quota=(max(0, quota - used) if quota is not None else None),
         )
 
     def get_quota_status(
@@ -108,9 +104,7 @@ class UsageService:
         return QuotaStatus(
             quota=quota,
             used=used,
-            remaining=(
-                max(0, quota - used) if quota is not None else None
-            ),
+            remaining=(max(0, quota - used) if quota is not None else None),
             exceeded=quota is not None and used >= quota,
             period_start=start,
             period_end=end,

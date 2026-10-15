@@ -1,11 +1,9 @@
-
 from __future__ import annotations
 
 from datetime import datetime
 from typing import Annotated
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
-
 
 KeyName = Annotated[
     str,
@@ -72,6 +70,7 @@ class AccountSummary(BaseModel):
 
     This project does not yet define a persistent Account model.
     """
+
     owner_id: OwnerId
     active_api_keys: int = Field(ge=0)
     monthly_quota: int | None = Field(default=None, ge=1)

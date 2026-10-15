@@ -1,7 +1,10 @@
-
 """ORM model for API usage records."""
 
 from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.db.models.api_key import APIKey
 
 from sqlalchemy import (
     DateTime,

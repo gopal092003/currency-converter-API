@@ -18,9 +18,7 @@ class Settings(BaseSettings):
 
     # Application
     app_name: str = "Currency Converter API"
-    app_env: Literal["development", "testing", "staging", "production"] = (
-        "development"
-    )
+    app_env: Literal["development", "testing", "staging", "production"] = "development"
     app_version: str = "2.0.0"
     debug: bool = False
     host: str = "127.0.0.1"
@@ -103,8 +101,7 @@ class Settings(BaseSettings):
     def validate_request_id_header(cls, value: str) -> str:
         """Reject empty or malformed request-ID header names."""
         if not value or not all(
-            char.isalnum() or char in "!#$%&'*+-.^_`|~"
-            for char in value
+            char.isalnum() or char in "!#$%&'*+-.^_`|~" for char in value
         ):
             raise ValueError("REQUEST_ID_HEADER is invalid")
 
@@ -129,8 +126,7 @@ class Settings(BaseSettings):
         """Validate settings that depend on one another."""
         if self.http_max_keepalive_connections > self.http_max_connections:
             raise ValueError(
-                "HTTP_MAX_KEEPALIVE_CONNECTIONS cannot exceed "
-                "HTTP_MAX_CONNECTIONS"
+                "HTTP_MAX_KEEPALIVE_CONNECTIONS cannot exceed HTTP_MAX_CONNECTIONS"
             )
 
         if self.api_key_auth_enabled and not self.api_key_pepper:
@@ -141,11 +137,12 @@ class Settings(BaseSettings):
         if self.app_env == "production" and self.debug:
             raise ValueError("DEBUG must be false in production")
 
-        if self.app_env == "production" and self.api_key_auth_enabled:
-            if not self.api_key_pepper or not self.api_key_pepper.get_secret_value():
-                raise ValueError(
-                    "A non-empty API_KEY_PEPPER is required in production"
-                )
+        if (
+            self.app_env == "production"
+            and self.api_key_auth_enabled
+            and (not self.api_key_pepper or not self.api_key_pepper.get_secret_value())
+        ):
+            raise ValueError("A non-empty API_KEY_PEPPER is required in production")
 
         return self
 

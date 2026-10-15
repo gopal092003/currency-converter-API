@@ -1,18 +1,14 @@
-
 """Structured logging configuration for the application."""
 
 import json
 import logging
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from app.core.config import settings
 
-
-_RESERVED_RECORD_FIELDS = set(
-    logging.makeLogRecord({}).__dict__.keys()
-) | {
+_RESERVED_RECORD_FIELDS = set(logging.makeLogRecord({}).__dict__.keys()) | {
     "message",
     "asctime",
 }
@@ -22,7 +18,7 @@ class JsonFormatter(logging.Formatter):
     """Format log records as single-line JSON objects."""
 
     def format(self, record: logging.LogRecord) -> str:
-        timestamp = datetime.now(timezone.utc).isoformat()
+        timestamp = datetime.now(UTC).isoformat()
 
         payload: dict[str, Any] = {
             "timestamp": timestamp,
@@ -35,9 +31,12 @@ class JsonFormatter(logging.Formatter):
 
         # Support structured fields passed via logger.info(..., extra={...}).
         for key, value in record.__dict__.items():
-            if key not in _RESERVED_RECORD_FIELDS and not key.startswith("_"):
-                if key not in payload:
-                    payload[key] = value
+            if (
+                key not in _RESERVED_RECORD_FIELDS
+                and not key.startswith("_")
+                and key not in payload
+            ):
+                payload[key] = value
 
         if record.exc_info:
             payload["exception"] = self.formatException(record.exc_info)

@@ -1,8 +1,6 @@
-
 """API tests for standardized error responses."""
 
 import pytest
-
 from app.api.dependencies import get_rates_service
 from app.core.exceptions import ProviderError
 
@@ -53,9 +51,7 @@ def test_missing_query_parameter_returns_validation_error(client):
 
 @pytest.mark.api
 def test_provider_error_uses_standard_error_response(app, client):
-    app.dependency_overrides[get_rates_service] = (
-        lambda: FailingRatesService()
-    )
+    app.dependency_overrides[get_rates_service] = lambda: FailingRatesService()
 
     try:
         response = client.get(

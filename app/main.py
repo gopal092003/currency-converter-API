@@ -1,8 +1,7 @@
-
 """FastAPI application entry point."""
 
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
 
 import httpx
 from fastapi import FastAPI, Request
@@ -10,14 +9,13 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+# This module should combine your API version routers.
+from app.api.router import api_router
 from app.core.config import settings
 from app.core.exceptions import AppException
 from app.modules.currency.service import CurrencyConversionService
 from app.modules.providers.factory import create_provider
 from app.modules.rates.service import RatesService
-
-# This module should combine your API version routers.
-from app.api.router import api_router
 
 
 @asynccontextmanager
@@ -28,9 +26,7 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
         timeout=httpx.Timeout(settings.exchange_timeout_seconds),
         limits=httpx.Limits(
             max_connections=settings.http_max_connections,
-            max_keepalive_connections=(
-                settings.http_max_keepalive_connections
-            ),
+            max_keepalive_connections=(settings.http_max_keepalive_connections),
         ),
     )
 
@@ -39,9 +35,7 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
 
         application.state.http_client = http_client
         application.state.provider = provider
-        application.state.currency_service = CurrencyConversionService(
-            provider
-        )
+        application.state.currency_service = CurrencyConversionService(provider)
         application.state.rates_service = RatesService(provider)
 
         yield
@@ -62,11 +56,7 @@ def create_app() -> FastAPI:
         debug=settings.debug,
         docs_url="/docs" if settings.app_env != "production" else None,
         redoc_url="/redoc" if settings.app_env != "production" else None,
-        openapi_url=(
-            "/openapi.json"
-            if settings.app_env != "production"
-            else None
-        ),
+        openapi_url=("/openapi.json" if settings.app_env != "production" else None),
         lifespan=lifespan,
     )
 

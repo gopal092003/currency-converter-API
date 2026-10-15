@@ -1,4 +1,3 @@
-
 """API tests for currency conversion."""
 
 import pytest

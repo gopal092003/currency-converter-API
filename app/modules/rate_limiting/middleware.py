@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import hashlib
@@ -58,18 +57,17 @@ class RateLimitMiddleware:
         ip_identity = hashlib.sha256(ip.encode()).hexdigest()
 
         endpoint_policy = select_endpoint_policy(path)
-        supplied_key = headers.get(self.key_header, b"").decode(
-            "latin-1"
-        )
+        supplied_key = headers.get(self.key_header, b"").decode("latin-1")
 
         # If an earlier authentication middleware has populated a validated
         # API-key record, prefer its stable database ID.
         state: dict[str, Any] = scope.setdefault("state", {})
         authenticated_key = state.get("api_key")
 
-        if authenticated_key is not None and getattr(
-            authenticated_key, "id", None
-        ) is not None:
+        if (
+            authenticated_key is not None
+            and getattr(authenticated_key, "id", None) is not None
+        ):
             endpoint_identity = f"key-id:{authenticated_key.id}"
         elif is_valid_api_key_format(supplied_key):
             # A hashed secret is not sent to Redis or logged. This bucket
@@ -133,9 +131,7 @@ class RateLimitMiddleware:
             if message["type"] == "http.response.start":
                 message = dict(message)
                 existing = list(message.get("headers", []))
-                existing_names = {
-                    name.lower() for name, _ in existing
-                }
+                existing_names = {name.lower() for name, _ in existing}
                 existing.extend(
                     (name, value)
                     for name, value in response_headers

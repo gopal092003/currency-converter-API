@@ -1,10 +1,8 @@
-
 """Root API router with versioned route prefixes."""
-
-from fastapi import APIRouter
 
 from app.api.v1.router import router as v1_router
 from app.core.config import settings
+from fastapi import APIRouter
 
 api_router = APIRouter()
 

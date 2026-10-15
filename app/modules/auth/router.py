@@ -1,21 +1,19 @@
-
 from __future__ import annotations
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
-from sqlalchemy.orm import Session
-
 from app.db.models.api_key import APIKey
 from app.db.session import get_db
 from app.modules.auth.schemas import (
-    APIKeyCreateRequest,
     APIKeyCreatedResponse,
+    APIKeyCreateRequest,
     APIKeyListResponse,
     APIKeyPublic,
     APIKeyRevokeResponse,
 )
 from app.modules.auth.service import APIKeyService
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/auth/api-keys", tags=["API keys"])
 
@@ -65,7 +63,10 @@ def create_api_key(
         name=payload.name,
         monthly_quota=payload.monthly_quota,
     )
-    return APIKeyCreatedResponse(data=APIKeyPublic.model_validate(record), api_key=raw_key)
+    return APIKeyCreatedResponse(
+        data=APIKeyPublic.model_validate(record),
+        api_key=raw_key,
+    )
 
 
 @router.get("", response_model=APIKeyListResponse)
@@ -94,7 +95,10 @@ def rotate_api_key(
         key_id=key_id,
         owner_id=current_key.owner_id,
     )
-    return APIKeyCreatedResponse(data=APIKeyPublic.model_validate(record), api_key=raw_key)
+    return APIKeyCreatedResponse(
+        data=APIKeyPublic.model_validate(record),
+        api_key=raw_key,
+    )
 
 
 @router.delete(

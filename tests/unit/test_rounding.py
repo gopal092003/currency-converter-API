@@ -1,10 +1,8 @@
-
 """Unit tests for currency precision and rounding."""
 
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal
 
 import pytest
-
 from app.modules.currency.rounding import (
     convert_and_round,
     get_currency_precision,

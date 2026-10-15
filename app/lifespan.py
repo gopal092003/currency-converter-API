@@ -1,9 +1,8 @@
-
 from __future__ import annotations
 
 import logging
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
 
 import httpx
 from fastapi import FastAPI
@@ -12,9 +11,9 @@ from app.core.config import settings
 from app.core.logging import configure_logging
 from app.modules.currency.service import CurrencyConversionService
 from app.modules.providers.factory import create_provider
-from app.modules.rates.service import RatesService
 from app.modules.rate_limiting.service import RateLimitService
 from app.modules.rate_limiting.storage import create_rate_limit_storage
+from app.modules.rates.service import RatesService
 
 logger = logging.getLogger(__name__)
 
@@ -41,18 +40,12 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
 
         application.state.http_client = http_client
         application.state.provider = provider
-        application.state.currency_service = CurrencyConversionService(
-            provider
-        )
+        application.state.currency_service = CurrencyConversionService(provider)
         application.state.rates_service = RatesService(provider)
 
-        rate_storage = await create_rate_limit_storage(
-            settings.redis_url
-        )
+        rate_storage = await create_rate_limit_storage(settings.redis_url)
         application.state.rate_limit_storage = rate_storage
-        application.state.rate_limit_service = RateLimitService(
-            rate_storage
-        )
+        application.state.rate_limit_service = RateLimitService(rate_storage)
 
         # RedisRateLimitStorage owns a Redis client, but it intentionally
         # doesn't close it itself because other services may share clients.

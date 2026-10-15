@@ -1,13 +1,11 @@
-
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-
 
 HealthStatus = Literal["ok", "degraded", "unavailable"]
 
@@ -28,7 +26,7 @@ def liveness() -> dict[str, Any]:
     """Return process liveness without checking external dependencies."""
     return {
         "status": "ok",
-        "timestamp": datetime.now(timezone.utc),
+        "timestamp": datetime.now(UTC),
     }
 
 
@@ -114,6 +112,6 @@ def combine_health(
 
     return HealthResponse(
         status=overall,
-        timestamp=datetime.now(timezone.utc),
+        timestamp=datetime.now(UTC),
         checks=checks,
     )

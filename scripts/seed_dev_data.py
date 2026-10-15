@@ -1,17 +1,14 @@
-
 from __future__ import annotations
 
 import sys
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from decimal import Decimal
-
-from sqlalchemy import select
 
 from app.core.config import settings
 from app.core.security import generate_api_key, get_api_key_prefix, hash_api_key
 from app.db.models import APIKey, ExchangeRate, RateSet
 from app.db.session import SessionLocal
-
+from sqlalchemy import select
 
 DEVELOPMENT_OWNER_ID = "local-dev"
 DEVELOPMENT_KEY_NAME = "Local development key"
@@ -61,7 +58,7 @@ def seed_rates(session) -> int:
             provider="development-seed",
             base_currency=base_currency,
             rate_date=today,
-            fetched_at=datetime.now(timezone.utc),
+            fetched_at=datetime.now(UTC),
         )
         session.add(rate_set)
         session.flush()

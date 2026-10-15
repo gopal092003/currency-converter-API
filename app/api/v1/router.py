@@ -1,9 +1,7 @@
-
 """V1 API router."""
 
-from fastapi import APIRouter
-
 from app.api.v1.endpoints import convert, currencies, rates
+from fastapi import APIRouter
 
 router = APIRouter()
 

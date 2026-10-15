@@ -1,11 +1,11 @@
-
 """Background worker for refreshing exchange-rate cache entries."""
 
 import asyncio
 import logging
+from collections.abc import Sequence
+from contextlib import suppress
 from datetime import date
 from decimal import Decimal
-from typing import Sequence
 
 from app.core.config import settings
 from app.modules.providers.base import ExchangeRateProvider
@@ -70,9 +70,7 @@ class RateRefreshWorker:
 
             returned_base = returned_base.strip().upper()
             if returned_base != base:
-                raise ValueError(
-                    f"Expected base {base}, received {returned_base}."
-                )
+                raise ValueError(f"Expected base {base}, received {returned_base}.")
 
             rate_date = date.fromisoformat(payload["date"])
             if rate_date > date.today():
@@ -98,14 +96,10 @@ class RateRefreshWorker:
                     or not rate.is_finite()
                     or rate <= 0
                 ):
-                    raise ValueError(
-                        f"Invalid rate entry returned for {raw_code!r}."
-                    )
+                    raise ValueError(f"Invalid rate entry returned for {raw_code!r}.")
 
                 if code in normalized_rates:
-                    raise ValueError(
-                        f"Duplicate currency code returned: {code}."
-                    )
+                    raise ValueError(f"Duplicate currency code returned: {code}.")
 
                 normalized_rates[code] = rate
 
@@ -182,13 +176,11 @@ class RateRefreshWorker:
             while not self._stop_event.is_set():
                 await self.run_once()
 
-                try:
+                with suppress(TimeoutError):
                     await asyncio.wait_for(
                         self._stop_event.wait(),
                         timeout=self.interval_seconds,
                     )
-                except asyncio.TimeoutError:
-                    pass
         finally:
             logger.info("Rate refresh worker stopped")
 

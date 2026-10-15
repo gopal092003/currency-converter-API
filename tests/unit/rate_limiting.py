@@ -1,23 +1,16 @@
-
 from __future__ import annotations
-
-import pytest
 
 import asyncio
 
-from app.modules.rate_limiting.service import RateLimitService
-from app.modules.rate_limiting.storage import InMemoryRateLimitStorage
-
+import pytest
 from app.modules.rate_limiting.policies import (
     CONVERSION_POLICY,
-    DEFAULT_IP_POLICY,
     DEFAULT_API_KEY_POLICY,
+    DEFAULT_IP_POLICY,
     READ_POLICY,
     RateLimitPolicy,
     RateLimitScope,
     select_endpoint_policy,
-    RateLimitPolicy,
-    RateLimitScope,
 )
 from app.modules.rate_limiting.service import RateLimitService
 from app.modules.rate_limiting.storage import InMemoryRateLimitStorage
@@ -81,8 +74,7 @@ async def test_rejected_requests_remain_rejected_in_same_window():
     policy = RateLimitPolicy("test", limit=1, window_seconds=60)
 
     decisions = [
-        await service.check(policy=policy, identity="client-a")
-        for _ in range(4)
+        await service.check(policy=policy, identity="client-a") for _ in range(4)
     ]
 
     assert [decision.allowed for decision in decisions] == [
@@ -151,21 +143,13 @@ def test_invalid_policies_are_rejected():
 
 
 def test_endpoint_policy_selection():
-    assert select_endpoint_policy("/api/v1/convert").name == (
-        CONVERSION_POLICY.name
-    )
-    assert select_endpoint_policy("/api/v1/convert/").name == (
-        CONVERSION_POLICY.name
-    )
+    assert select_endpoint_policy("/api/v1/convert").name == (CONVERSION_POLICY.name)
+    assert select_endpoint_policy("/api/v1/convert/").name == (CONVERSION_POLICY.name)
     assert select_endpoint_policy("/api/v1/convert/preview").name == (
         CONVERSION_POLICY.name
     )
-    assert select_endpoint_policy("/api/v1/rates/latest").name == (
-        READ_POLICY.name
-    )
-    assert select_endpoint_policy("/api/v1/currencies").name == (
-        READ_POLICY.name
-    )
+    assert select_endpoint_policy("/api/v1/rates/latest").name == (READ_POLICY.name)
+    assert select_endpoint_policy("/api/v1/currencies").name == (READ_POLICY.name)
 
 
 def test_unknown_endpoint_uses_default_policy():
@@ -211,6 +195,7 @@ async def test_ip_limit_is_checked_before_endpoint_limit():
         ip_policy=ip_policy,
     )
 
+
 @pytest.mark.asyncio
 async def test_exact_limit_boundary():
     storage = InMemoryRateLimitStorage()
@@ -223,8 +208,7 @@ async def test_exact_limit_boundary():
     )
 
     decisions = [
-        await service.check(policy=policy, identity="client-a")
-        for _ in range(5)
+        await service.check(policy=policy, identity="client-a") for _ in range(5)
     ]
 
     assert all(item.allowed for item in decisions)
@@ -301,10 +285,7 @@ async def test_concurrent_requests_never_exceed_limit():
     )
 
     decisions = await asyncio.gather(
-        *(
-            service.check(policy=policy, identity="same-client")
-            for _ in range(100)
-        )
+        *(service.check(policy=policy, identity="same-client") for _ in range(100))
     )
 
     accepted = sum(item.allowed for item in decisions)
@@ -327,10 +308,7 @@ async def test_concurrent_clients_have_independent_capacity():
 
     async def send_batch(identity: str):
         return await asyncio.gather(
-            *(
-                service.check(policy=policy, identity=identity)
-                for _ in range(10)
-            )
+            *(service.check(policy=policy, identity=identity) for _ in range(10))
         )
 
     results_a, results_b = await asyncio.gather(
@@ -396,10 +374,7 @@ async def test_remaining_capacity_never_becomes_negative():
     )
 
     results = await asyncio.gather(
-        *(
-            service.check(policy=policy, identity="client-a")
-            for _ in range(20)
-        )
+        *(service.check(policy=policy, identity="client-a") for _ in range(20))
     )
 
     assert all(item.remaining >= 0 for item in results)
@@ -408,8 +383,7 @@ async def test_remaining_capacity_never_becomes_negative():
 
 @pytest.mark.asyncio
 async def test_separate_storage_instances_do_not_share_counters():
-    # Documents the in-memory backend limitation: each process/storage
-    # instance maintains independent counters.
+    # Each in-memory storage instance maintains independent counters.
     storage_a = InMemoryRateLimitStorage()
     storage_b = InMemoryRateLimitStorage()
     policy = RateLimitPolicy(
@@ -429,8 +403,5 @@ async def test_separate_storage_instances_do_not_share_counters():
 
     assert first_a.allowed is True
     assert first_b.allowed is True
-    assert first.allowed is True
-    assert first_ip is not None
-    assert second.allowed is False
-    assert second.policy_name == "ip-test"
-    assert second_ip is None
+    assert first_a.remaining == 0
+    assert first_b.remaining == 0

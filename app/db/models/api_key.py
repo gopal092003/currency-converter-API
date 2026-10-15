@@ -1,16 +1,17 @@
-
 """ORM model for API-key authentication."""
 
 from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.db.models.usage import UsageRecord
 
 from sqlalchemy import (
     Boolean,
     DateTime,
-    ForeignKey,
     Index,
     Integer,
     String,
-    func,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -83,6 +84,4 @@ class APIKey(TimestampMixin, Base):
         passive_deletes=True,
     )
 
-    __table_args__ = (
-        Index("ix_api_keys_prefix_active", "key_prefix", "is_active"),
-    )
+    __table_args__ = (Index("ix_api_keys_prefix_active", "key_prefix", "is_active"),)

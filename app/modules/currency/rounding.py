@@ -1,6 +1,6 @@
 """Decimal-safe monetary rounding utilities."""
 
-from decimal import Decimal, InvalidOperation, ROUND_HALF_EVEN, localcontext
+from decimal import ROUND_HALF_EVEN, Decimal, InvalidOperation, localcontext
 
 # ISO 4217 minor-unit digits for common currencies.
 # Expand this registry or load it from a maintained currency metadata source.
@@ -50,11 +50,7 @@ def quantize_amount(
     if not amount.is_finite():
         raise ValueError("Amount must be finite.")
 
-    digits = (
-        get_currency_precision(currency)
-        if precision is None
-        else precision
-    )
+    digits = get_currency_precision(currency) if precision is None else precision
 
     if digits < 0:
         raise ValueError("Precision cannot be negative.")
@@ -65,11 +61,16 @@ def quantize_amount(
         with localcontext() as context:
             context.prec = max(
                 context.prec,
-                len(amount.as_tuple().digits) + abs(amount.as_tuple().exponent) + digits + 10,
+                len(amount.as_tuple().digits)
+                + abs(amount.as_tuple().exponent)
+                + digits
+                + 10,
             )
             return amount.quantize(quantum, rounding=rounding)
     except InvalidOperation as exc:
-        raise ValueError("Amount cannot be represented at the requested precision.") from exc
+        raise ValueError(
+            "Amount cannot be represented at the requested precision."
+        ) from exc
 
 
 def multiply_amount(
@@ -86,9 +87,7 @@ def multiply_amount(
     with localcontext() as context:
         context.prec = max(
             context.prec,
-            len(amount.as_tuple().digits)
-            + len(rate.as_tuple().digits)
-            + 10,
+            len(amount.as_tuple().digits) + len(rate.as_tuple().digits) + 10,
         )
         result = amount * rate
 
