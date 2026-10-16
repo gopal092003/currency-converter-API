@@ -58,6 +58,8 @@ Desktop.ini
 *.log
 api_integration.txt
 collect.txt
+sessionpytest.txt
+ting, and observability*
 logs/
 tmp/
 temp/
