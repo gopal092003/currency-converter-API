@@ -19,9 +19,13 @@ RUN apt-get update \
 COPY pyproject.toml README.md ./
 
 # Install the API plus optional database, Redis and observability support.
-# Remove optional groups only if they are not defined in pyproject.toml.
-RUN pip install --no-cache-dir \
+RUN python -m pip install --no-cache-dir \
     ".[database,redis,observability]"
+
+# Upgrade vulnerable packaging tools and their vendored dependencies.
+RUN python -m pip install --no-cache-dir --upgrade \
+    "setuptools>=82.0.0" \
+    "wheel>=0.46.2"
 
 # Copy the application after dependencies to improve build caching.
 COPY app/ ./app/
