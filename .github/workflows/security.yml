@@ -88,7 +88,7 @@ jobs:
         run: docker build -t currency-converter-api:security-scan .
 
       - name: Scan image
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: currency-converter-api:security-scan
           format: table
