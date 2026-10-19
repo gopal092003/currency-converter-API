@@ -199,6 +199,14 @@ currently mounted public API does not use the database, Redis, or expose
 `/metrics`; treat those services as infrastructure scaffolding until those
 integrations are connected and verified.
 
+## Architecture diagram
+
+![Architecture diagram](assets/architecture.png)
+
+The architecture diagram shows the runtime boundaries and component flow
+implemented in the application. See [Architecture and runtime boundaries](docs/architecture.md)
+for the detailed breakdown.
+
 ## Documentation
 
 - [API reference](docs/api.md)
